@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Updater.Updater.Commands;
 
 namespace Updater.Updater
 {
     internal class Program
     {
+        // argument 0 - process ID
+        // argument 1 - full path to EXE file for start app
         private static void Main(string[] args)
         {
             try
@@ -28,9 +29,9 @@ namespace Updater.Updater
 
                 var commands = new List<ICommand>
                 {
-                    //new KillProcessCommand(processId),
+                    new KillProcessCommand(processId),
                     new CopyContentCommand(),
-                    //new StartProcessCommand(appFullName)
+                    new StartProcessCommand(appFullName)
                 };
 
                 commands.ForEach(x => x.Execute());

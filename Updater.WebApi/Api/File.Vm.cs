@@ -1,8 +1,16 @@
-﻿namespace Updater.WebApi.Api
+﻿using System;
+
+namespace Updater.WebApi.Api
 {
-    public sealed class FileVm
+    public sealed class FileInVm
     {
-        public FileVm(string hash, string appName)
+        public Guid AppGuid { get; set; }
+    }
+
+
+    public sealed class FileOutVm
+    {
+        public FileOutVm(string hash, string appName)
         {
             Hash = hash;
             AppName = appName;

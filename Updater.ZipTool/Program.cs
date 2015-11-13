@@ -13,6 +13,8 @@ namespace Updater.ZipTool
         private const string App = "app";
         private const string Updater = "Updater.Updater.exe";
 
+        // argument 0 - path to EXE file (source)
+        // argument 1 - path to folder where must be stored appfolder with archive
         static void Main(string[] args)
         {
             try
@@ -30,17 +32,19 @@ namespace Updater.ZipTool
                     throw new Exception("invalid parameters");
                 }
 
+                var appName = Path.GetFileNameWithoutExtension(sourceFile);
+                var appFolder = appName.Replace('.', '_');
                 var sourcePath = Path.GetDirectoryName(sourceFile);
                 var versionInfo = FileVersionInfo.GetVersionInfo(sourceFile);
                 var zipName = PackageNameProvider.Generate(versionInfo);
 
                 var currentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().FullName);
-                var tempPath = Path.Combine(currentPath, Temp);
+                var tempPath = Path.Combine(currentPath, appFolder, Temp);
 
                 CopyContent(sourcePath, Path.Combine(tempPath, App));
                 CopyUpdater(currentPath, tempPath);
 
-                ZipFile.CreateFromDirectory(tempPath, Path.Combine(destinationPath, zipName));
+                ZipFile.CreateFromDirectory(tempPath, Path.Combine(destinationPath, appFolder, zipName));
 
                 Directory.Delete(tempPath, true);
                 Console.WriteLine("done");

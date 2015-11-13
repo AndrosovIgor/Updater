@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Owin.Hosting;
+using Updater.WebApi.SystemConfiguration;
 
 namespace Updater.WebApi
 {
@@ -7,7 +8,7 @@ namespace Updater.WebApi
     {
         private static void Main(string[] args)
         {
-            using (WebApp.Start<Startup>(SystemConfiguration.Host))
+            using (WebApp.Start<Startup>(ConfigurationProvider.Host))
             {
                 Console.ReadLine();
             }

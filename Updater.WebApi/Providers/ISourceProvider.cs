@@ -4,7 +4,7 @@ namespace Updater.WebApi.Providers
 {
     public interface ISourceProvider
     {
-        string GetVersion();
-        Stream GetFileStream();
+        string GetVersion(string appName);
+        Stream GetFileStream(string appName);
     }
 }

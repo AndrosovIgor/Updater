@@ -9,9 +9,9 @@ namespace Updater.WebApi.Providers
         private const string SourcePath = @"E:\temp\";
         private const string SearchPattern = @"*.zip";
 
-        public string GetVersion()
+        public string GetVersion(string appName)
         {
-            var fileName = GetFileName();
+            var fileName = GetFileName(appName);
             if (String.IsNullOrWhiteSpace(fileName))
             {
                 return null;
@@ -20,15 +20,22 @@ namespace Updater.WebApi.Providers
             return PackageNameProvider.GetVersion(fileName);
         }
 
-        public Stream GetFileStream()
+        public Stream GetFileStream(string appName)
         {
-            var fileName = GetFileName();
-            return new FileStream(fileName, FileMode.Open);
+            var fileName = GetFileName(appName);
+            using (var fs = new FileStream(fileName, FileMode.Open))
+            {
+                var mem = new MemoryStream();
+                fs.CopyTo(mem);
+                return mem;
+            }
         }
 
-        private string GetFileName()
+        private string GetFileName(string appName)
         {
-            return Directory.GetFiles(SourcePath, SearchPattern).OrderByDescending(x => x).FirstOrDefault();
+            return Directory.GetFiles( Path.Combine(SourcePath, Path.GetFileNameWithoutExtension(appName).Replace('.', '_')), SearchPattern)
+                .OrderByDescending(x => x)
+                .FirstOrDefault();
         }
     }
 }

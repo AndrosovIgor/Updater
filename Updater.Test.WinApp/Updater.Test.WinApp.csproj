@@ -79,6 +79,10 @@
       <Project>{89ff4c1c-51d5-448c-a61b-c346b06c1aa7}</Project>
       <Name>Updater.Test.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Updater.UpdatePlugin\Updater.UpdatePlugin.csproj">
+      <Project>{245cd3c9-b8ff-40e3-b859-c58559828345}</Project>
+      <Name>Updater.UpdatePlugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\1.jpg">

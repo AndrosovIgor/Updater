@@ -14,6 +14,8 @@ namespace Updater.Test.WinApp
         [STAThread]
         static void Main()
         {
+            //init plugin
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());

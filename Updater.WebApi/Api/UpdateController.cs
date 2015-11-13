@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -7,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web.Http;
 using Updater.WebApi.Providers;
+using Updater.WebApi.SystemConfiguration;
 
 namespace Updater.WebApi.Api
 {
@@ -28,19 +30,25 @@ namespace Updater.WebApi.Api
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
-            
+
             return Request.CreateResponse(HttpStatusCode.OK, new CheckVersionOutVm(
-                CompareVersions(vm.Version, _sourceProvider.GetVersion()),
-                SystemConfiguration.RefreshTimeout));
+                CompareVersions(vm.Version, _sourceProvider.GetVersion(GetAppNameByGuid(vm.AppGuid))),
+                ConfigurationProvider.RefreshTimeout));
         }
 
         [HttpPost]
         [Route("getfile")]
-        public HttpResponseMessage GetFile()
+        public HttpResponseMessage GetFile(FileInVm vm)
         {
-            var stream = _sourceProvider.GetFileStream();
+            if (vm == null)
+            {
+                vm = new FileInVm();
+            }
 
-            var response = Request.CreateResponse(HttpStatusCode.OK, new FileVm(GetHash(stream), SystemConfiguration.AppName));
+            var appName = GetAppNameByGuid(vm.AppGuid);
+            var stream = _sourceProvider.GetFileStream(appName);
+
+            var response = Request.CreateResponse(HttpStatusCode.OK, new FileOutVm(GetHash(stream), appName));
             response.Content = new StreamContent(stream);
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
@@ -76,6 +84,18 @@ namespace Updater.WebApi.Api
                 md5.Dispose();
                 stream.Position = 0;
             }
+        }
+
+        private string GetAppNameByGuid(Guid appGuid)
+        {
+            var items = ConfigurationProvider.Applications;
+            if (items.All(x => x.AppGuid != appGuid))
+            {
+                var firstItem = items.FirstOrDefault();
+                return firstItem == null ? String.Empty : firstItem.AppName;
+            }
+
+            return items.First(x => x.AppGuid == appGuid).AppName;
         }
 
         #endregion

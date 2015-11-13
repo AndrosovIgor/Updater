@@ -21,7 +21,13 @@ namespace Updater.WebApi.SystemConfiguration
         {
             get
             {
-                return (ConfigurationManager.GetSection("applications") as Applications).Items.Cast<Application>().ToList();
+                var applications = ConfigurationManager.GetSection("applications") as Applications;
+                if (applications == null || applications.Items.Count == 0)
+                {
+                    throw new ArgumentException("configuration section 'apllications' missed");
+                }
+
+                return applications.Items.Cast<Application>().ToList();
             }
         }
     }

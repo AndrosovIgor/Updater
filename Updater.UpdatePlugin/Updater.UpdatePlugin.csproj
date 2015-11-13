@@ -39,7 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Initializer.cs" />
+    <Compile Include="Providers\ISecurityProvider.cs" />
+    <Compile Include="Providers\ISourceProvider.cs" />
+    <Compile Include="Providers\IUpdateEventHandler.cs" />
+    <Compile Include="Updater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

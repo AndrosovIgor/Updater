@@ -1,12 +1,12 @@
 ﻿using System;
-using System.IO;
 
 namespace Updater.UpdatePlugin.Providers
 {
-    public interface ISourceProvider
+    public interface ISourceProvider : IDisposable
     {
-        bool UpdatesAvailable();
-        event Action HaveUpdates;
-        Stream GetPackage();
+        bool CheckForUpdates();
+        event Action<ISourceProvider> HaveUpdates;
+        PackageInfo GetPackage();
+        void CheckInBackground();
     }
 }

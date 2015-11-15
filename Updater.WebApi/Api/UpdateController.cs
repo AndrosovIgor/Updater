@@ -37,8 +37,8 @@ namespace Updater.WebApi.Api
         }
 
         [HttpPost]
-        [Route("getfile")]
-        public HttpResponseMessage GetFile(FileInVm vm)
+        [Route("getfileinfo")]
+        public HttpResponseMessage GetFileInfo(FileInVm vm)
         {
             if (vm == null)
             {
@@ -47,10 +47,19 @@ namespace Updater.WebApi.Api
 
             var appName = GetAppNameByGuid(vm.AppGuid);
             var stream = _sourceProvider.GetFileStream(appName);
+            return Request.CreateResponse(HttpStatusCode.OK, new FileOutVm(GetHash(stream), appName));
+        }
 
-            var response = Request.CreateResponse(HttpStatusCode.OK, new FileOutVm(GetHash(stream), appName));
+        [HttpGet]
+        [Route("getfile")]
+        public HttpResponseMessage GetFile(Guid appGuid)
+        {
+            var appName = GetAppNameByGuid(appGuid);
+            var stream = _sourceProvider.GetFileStream(appName);
+
+            var response = Request.CreateResponse(HttpStatusCode.OK);
             response.Content = new StreamContent(stream);
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
             response.Content.Headers.ContentDisposition.FileName = "updates.zip";
             return response;

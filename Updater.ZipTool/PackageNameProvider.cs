@@ -12,7 +12,7 @@ namespace Updater.ZipTool
                 versionInfo.FileMinorPart,
                 versionInfo.FileBuildPart,
                 versionInfo.FilePrivatePart,
-                DateTime.Now.ToString("dd_mm_yyyy"));
+                DateTime.Now.ToString("dd_MM_yyyy"));
         }
     }
 }

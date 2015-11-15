@@ -14,7 +14,11 @@ namespace Updater.Test.WinApp
         [STAThread]
         static void Main()
         {
-            //init plugin
+            UpdatePlugin.Updater.Init(
+                new SecurityProvider(), 
+                true,
+                new UpdateHandler(),
+                null);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

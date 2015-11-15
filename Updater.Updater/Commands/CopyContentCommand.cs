@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace Updater.Updater.Commands
@@ -23,13 +24,16 @@ namespace Updater.Updater.Commands
         {
             foreach (var file in destinationdirInfo.GetFiles())
             {
+                File.SetAttributes(file.FullName, FileAttributes.Normal);
                 file.Delete();
             }
+
             foreach (var dir in destinationdirInfo.GetDirectories())
             {
                 if (dir.Name != Updates)
                 {
-                    dir.Delete(true);
+                    RemoveContent(dir);
+                    dir.Delete();
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading;
 
 namespace Updater.Updater.Commands
 {
@@ -14,6 +15,7 @@ namespace Updater.Updater.Commands
         public void Execute()
         {
             Process.GetProcessById(_processId).Kill();
+            Thread.Sleep(2000);
         }
     }
 }

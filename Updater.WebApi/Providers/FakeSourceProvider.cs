@@ -6,7 +6,7 @@ namespace Updater.WebApi.Providers
 {
     public class FakeSourceProvider : ISourceProvider
     {
-        private const string SourcePath = @"E:\temp\";
+        private const string SourcePath = @"D:\temp\";
         private const string SearchPattern = @"*.zip";
 
         public string GetVersion(string appName)
@@ -27,6 +27,7 @@ namespace Updater.WebApi.Providers
             {
                 var mem = new MemoryStream();
                 fs.CopyTo(mem);
+                mem.Position = 0;
                 return mem;
             }
         }
